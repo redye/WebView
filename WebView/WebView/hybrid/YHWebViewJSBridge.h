@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "YHWebView.h"
 
-@protocol JSBridgeDelegate<NSObject>
+@protocol YHWebViewJSBridgeDelegate<NSObject>
 
 @optional
 
 
 @end
 
-@interface JSBridge : NSObject
+@interface YHWebViewJSBridge : NSObject<YHWebViewDelegate>
 
-@property (nonatomic, weak) id<YHWebViewDelegate, JSBridgeDelegate> delegate;
+@property (nonatomic, weak) id<YHWebViewDelegate, YHWebViewJSBridgeDelegate> delegate;
 
 @end

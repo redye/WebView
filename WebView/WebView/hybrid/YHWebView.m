@@ -9,22 +9,36 @@
 #import "YHWebView.h"
 
 static NSString *YHWebViewUserAgentAppScheme;
-static NSArray<NSString *> *YHWebViewScriptMessageNames;
+static NSString *YHWebViewScriptMessageNames;
 
+@interface YHScriptMessageHandler: NSObject<WKScriptMessageHandler>
+
+@property (nonatomic, weak) id<WKScriptMessageHandler> delegate;
+
+@end
+
+@implementation YHScriptMessageHandler
+
+#pragma mark - WKScriptMessageHandler
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(userContentController:didReceiveScriptMessage:)]) {
+        [self.delegate userContentController:userContentController didReceiveScriptMessage:message];
+    }
+}
+
+@end
 
 @interface YHWebView()<WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler>
 
-@property (nonatomic, weak) id<YHWebViewDelegate> delegate;
+@property (nonatomic, weak) id<YHWebViewDelegate> webViewdelegate;
 
 @end
 
 @implementation YHWebView
 
 - (void)dealloc {
-    NSArray *messageNames = [YHWebView scriptMessageNames];
-    [messageNames enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [self.configuration.userContentController removeScriptMessageHandlerForName:obj];
-    }];
+    NSLog(@"====>dealloc");
+    [self.configuration.userContentController removeScriptMessageHandlerForName:[YHWebView scriptMessageNames]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame delegate:(id<YHWebViewDelegate>)delegate {
@@ -33,14 +47,15 @@ static NSArray<NSString *> *YHWebViewScriptMessageNames;
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     WKUserContentController *contentController = [[WKUserContentController alloc] init];
     
-    NSArray *messageNames = [YHWebView scriptMessageNames];
-    [messageNames enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [contentController addScriptMessageHandler:self name:obj];
-    }];
+    // 这里这样使用 handler ，是为了消除循环应用
+    YHScriptMessageHandler *handler = [[YHScriptMessageHandler alloc] init];
+    handler.delegate = self;
+//    [contentController addScriptMessageHandler:self name:[YHWebView scriptMessageNames]];
+    [contentController addScriptMessageHandler:handler name:[YHWebView scriptMessageNames]];
     configuration.userContentController = contentController;
     self = [super initWithFrame:frame configuration:configuration];
     if (self) {
-        _delegate = delegate;
+        _webViewdelegate = delegate;
         [self setUp];
     }
     return self;
@@ -78,22 +93,102 @@ static NSArray<NSString *> *YHWebViewScriptMessageNames;
     return YHWebViewUserAgentAppScheme ?: @"WEB";
 }
 
-+ (void)setScriptMessageNames:(NSArray<NSString *> *)messageNames {
++ (void)setScriptMessageNames:(NSString *)messageNames {
     YHWebViewScriptMessageNames = messageNames;
 }
 
-+ (NSArray<NSString *> *)scriptMessageNames {
-    return YHWebViewScriptMessageNames ?: @[@"Native"];
++ (NSString *)scriptMessageNames {
+    return YHWebViewScriptMessageNames ?: @"native";
 }
 
 #pragma mark - WKUIDelegate
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
     NSLog(@"alert");
+    completionHandler();
+}
+
+#pragma mark - WKNavigationDelegate
+///请求之前，决定是否要跳转:用户点击网页上的链接，需要打开新页面时，将先调用这个方法。
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    NSLog(@"1");
+    BOOL isAllow = YES;
+    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:)]) {
+        isAllow = [self.webViewdelegate webView:self shouldStartLoadWithRequest:navigationAction.request];
+    }
+    decisionHandler(isAllow ? WKNavigationActionPolicyAllow: WKNavigationActionPolicyCancel);
+}
+
+///接收到相应数据后，决定是否跳转
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+    NSLog(@"2");
+    decisionHandler(WKNavigationResponsePolicyAllow);
+}
+
+///页面开始加载时调用
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
+    NSLog(@"3");
+    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
+        [self.webViewdelegate webViewDidStartLoad:self];
+    }
+}
+
+///主机地址被重定向时调用
+- (void)webView:(WKWebView *)webView didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
+    // 重定向
+    NSLog(@"4");
+}
+
+///页面加载失败时调用
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"5");
+    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
+        [self.webViewdelegate webView:self didFailLoadWithError:error];
+    }
+}
+
+///当内容开始返回时调用
+- (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation {
+    NSLog(@"6");
+}
+
+///页面加载完毕时调用
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation {
+    NSLog(@"7");
+    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
+        [self.webViewdelegate webViewDidFinishLoad:self];
+    }
+}
+
+///跳转失败时调用
+- (void)webView:(WKWebView *)webView didFailNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"8");
+}
+
+///如果需要证书验证，与使用AFN进行HTTPS证书验证是一样的
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
+    NSLog(@"9");
+    completionHandler(0, nil);
 }
 
 #pragma mark - WKScriptMessageHandler
+///JS 调用 OC 的时候回调到该方法
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
-    
+    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webView:didReceiveScriptMessage:)]) {
+        id messageBody = message.body;
+        if ([messageBody isKindOfClass:[NSDictionary class]]) {
+            YHScriptMessage *scriptMessage = [[YHScriptMessage alloc] initWithDictionary:messageBody];
+            if (scriptMessage) {
+                [self.webViewdelegate webView:self didReceiveScriptMessage:scriptMessage];
+            }
+        }
+    }
+}
+
+#pragma mark - methods
+- (void)callback:(NSString *)callback response:(id)response {
+    [self evaluateJavaScript:[NSString stringWithFormat:@"%@('%@')", callback, response] completionHandler:^(id _Nullable response, NSError * _Nullable error) {
+        NSLog(@"调用结果");
+    }];
 }
 
 @end
