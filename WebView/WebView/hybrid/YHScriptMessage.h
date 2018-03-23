@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "YHWebViewHeader.h"
 
 @interface YHScriptMessage : NSObject
 
@@ -14,10 +15,16 @@
 
 @property (nonatomic, strong) NSString *action;
 
-@property (nonatomic, strong) NSString *callback;
-
 @property (nonatomic, strong) NSDictionary *param;
 
+@property (nonatomic, strong) NSString *callbackFun;
+
+@property (nonatomic, strong) NSString *callbackId;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+
+- (void)setCallback:(JSResponseCallback)callback;
+
+- (void)callback:(NSDictionary *)response;
 
 @end

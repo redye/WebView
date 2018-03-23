@@ -55,12 +55,36 @@
 
 @interface YHWebView : WKWebView
 
-- (instancetype)initWithFrame:(CGRect)frame delegate:(id<YHWebViewDelegate>)delegate;
+@property (nonatomic, weak) id<YHWebViewDelegate> webViewDelegate;
 
+/**
+ 初始化 webView 的实例
+
+ @param frame 位置
+ @return webView 实例
+ */
+- (instancetype)initWithFrame:(CGRect)frame;
+
+/**
+ 设置 app scheme
+
+ @param appScheme app scheme
+ */
 + (void)setAppScheme:(NSString *)appScheme;
 
-+ (void)setScriptMessageNames:(NSArray<NSString *> *)messageNames;
+/**
+ 设置 JS 调用 OC 时使用的 messageName
+ window.webkit.messageHandlers.xxx.postMessage(msgBody)
 
-- (void)callback:(NSString *)callback response:(id)response;
+ @param messageName messageName
+ */
++ (void)setScriptMessageName:(NSString *)messageName;
+
+/**
+ OC 主动调用 JS
+
+ @param javaScriptString JS 代码
+ */
+- (void)evaluateJavaScript:(NSString *)javaScriptString;
 
 @end

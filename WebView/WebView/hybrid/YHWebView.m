@@ -9,7 +9,7 @@
 #import "YHWebView.h"
 
 static NSString *YHWebViewUserAgentAppScheme;
-static NSString *YHWebViewScriptMessageNames;
+static NSString *YHWebViewScriptMessageName;
 
 @interface YHScriptMessageHandler: NSObject<WKScriptMessageHandler>
 
@@ -30,18 +30,17 @@ static NSString *YHWebViewScriptMessageNames;
 
 @interface YHWebView()<WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler>
 
-@property (nonatomic, weak) id<YHWebViewDelegate> webViewdelegate;
 
 @end
 
 @implementation YHWebView
 
 - (void)dealloc {
-    NSLog(@"====>dealloc");
-    [self.configuration.userContentController removeScriptMessageHandlerForName:[YHWebView scriptMessageNames]];
+    NSLog(@"WebView dealloc");
+    [self.configuration.userContentController removeScriptMessageHandlerForName:[YHWebView scriptMessageName]];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame delegate:(id<YHWebViewDelegate>)delegate {
+- (instancetype)initWithFrame:(CGRect)frame {
     [self setWebViewUserAgent];
     
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
@@ -51,11 +50,10 @@ static NSString *YHWebViewScriptMessageNames;
     YHScriptMessageHandler *handler = [[YHScriptMessageHandler alloc] init];
     handler.delegate = self;
 //    [contentController addScriptMessageHandler:self name:[YHWebView scriptMessageNames]];
-    [contentController addScriptMessageHandler:handler name:[YHWebView scriptMessageNames]];
+    [contentController addScriptMessageHandler:handler name:[YHWebView scriptMessageName]];
     configuration.userContentController = contentController;
     self = [super initWithFrame:frame configuration:configuration];
     if (self) {
-        _webViewdelegate = delegate;
         [self setUp];
     }
     return self;
@@ -93,12 +91,12 @@ static NSString *YHWebViewScriptMessageNames;
     return YHWebViewUserAgentAppScheme ?: @"WEB";
 }
 
-+ (void)setScriptMessageNames:(NSString *)messageNames {
-    YHWebViewScriptMessageNames = messageNames;
++ (void)setScriptMessageName:(NSString *)messageName {
+    YHWebViewScriptMessageName = messageName;
 }
 
-+ (NSString *)scriptMessageNames {
-    return YHWebViewScriptMessageNames ?: @"native";
++ (NSString *)scriptMessageName {
+    return YHWebViewScriptMessageName ?: @"native";
 }
 
 #pragma mark - WKUIDelegate
@@ -112,8 +110,8 @@ static NSString *YHWebViewScriptMessageNames;
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSLog(@"1");
     BOOL isAllow = YES;
-    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:)]) {
-        isAllow = [self.webViewdelegate webView:self shouldStartLoadWithRequest:navigationAction.request];
+    if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:)]) {
+        isAllow = [self.webViewDelegate webView:self shouldStartLoadWithRequest:navigationAction.request];
     }
     decisionHandler(isAllow ? WKNavigationActionPolicyAllow: WKNavigationActionPolicyCancel);
 }
@@ -127,8 +125,8 @@ static NSString *YHWebViewScriptMessageNames;
 ///页面开始加载时调用
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     NSLog(@"3");
-    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
-        [self.webViewdelegate webViewDidStartLoad:self];
+    if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
+        [self.webViewDelegate webViewDidStartLoad:self];
     }
 }
 
@@ -141,8 +139,8 @@ static NSString *YHWebViewScriptMessageNames;
 ///页面加载失败时调用
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
     NSLog(@"5");
-    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
-        [self.webViewdelegate webView:self didFailLoadWithError:error];
+    if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
+        [self.webViewDelegate webView:self didFailLoadWithError:error];
     }
 }
 
@@ -154,8 +152,8 @@ static NSString *YHWebViewScriptMessageNames;
 ///页面加载完毕时调用
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     NSLog(@"7");
-    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
-        [self.webViewdelegate webViewDidFinishLoad:self];
+    if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
+        [self.webViewDelegate webViewDidFinishLoad:self];
     }
 }
 
@@ -173,22 +171,20 @@ static NSString *YHWebViewScriptMessageNames;
 #pragma mark - WKScriptMessageHandler
 ///JS 调用 OC 的时候回调到该方法
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
-    if (self.webViewdelegate && [self.webViewdelegate respondsToSelector:@selector(webView:didReceiveScriptMessage:)]) {
+    if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(webView:didReceiveScriptMessage:)]) {
         id messageBody = message.body;
         if ([messageBody isKindOfClass:[NSDictionary class]]) {
             YHScriptMessage *scriptMessage = [[YHScriptMessage alloc] initWithDictionary:messageBody];
             if (scriptMessage) {
-                [self.webViewdelegate webView:self didReceiveScriptMessage:scriptMessage];
+                [self.webViewDelegate webView:self didReceiveScriptMessage:scriptMessage];
             }
         }
     }
 }
 
 #pragma mark - methods
-- (void)callback:(NSString *)callback response:(id)response {
-    [self evaluateJavaScript:[NSString stringWithFormat:@"%@('%@')", callback, response] completionHandler:^(id _Nullable response, NSError * _Nullable error) {
-        NSLog(@"调用结果");
-    }];
+- (void)evaluateJavaScript:(NSString *)javaScriptString {
+    [self evaluateJavaScript:javaScriptString completionHandler:nil];
 }
 
 @end

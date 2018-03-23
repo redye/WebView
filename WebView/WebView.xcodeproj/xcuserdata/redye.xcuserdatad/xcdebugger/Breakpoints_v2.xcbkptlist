@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WebView/NativeHandler.m"
-            timestampString = "543403401.71671"
+            filePath = "WebView/hybrid/YHJSBridge+Common.m"
+            timestampString = "543492804.546206"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "16"
-            endingLineNumber = "16"
-            landmarkName = "-nativeLog:callback:"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "-applicationEnterForeground"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WebView/hybrid/YHWebView.m"
-            timestampString = "543403401.7168469"
+            filePath = "WebView/hybrid/YHJSBridge.m"
+            timestampString = "543492804.546306"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "-dealloc"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "-injectMessageWithFunction:actionId:params:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WebView/hybrid/YHJSBridge.m"
+            timestampString = "543492804.5467319"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "-injectMessageWithFunction:actionId:params:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

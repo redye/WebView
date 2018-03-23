@@ -10,6 +10,10 @@
 #define YHWebViewHeader_h
 
 
-typedef void(^CallbackBlock)(id response);
+typedef void(^JSResponseCallback)(NSDictionary *response);
+
+@class YHScriptMessage;
+typedef void(^HandleBlock)(YHScriptMessage *message);
+
 
 #endif /* YHWebViewHeader_h */

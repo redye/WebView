@@ -8,11 +8,12 @@
 
 #import "WebViewController.h"
 #import "YHWebView.h"
-#import "YHWebViewJSBridge.h"
+#import "YHJSBridge.h"
+#import "YHJSBridge+Common.h"
 
-@interface WebViewController ()<YHWebViewDelegate, YHWebViewJSBridgeDelegate>
+@interface WebViewController ()<YHWebViewDelegate, YHJSBridgeDelegate>
 
-@property (nonatomic, strong) YHWebViewJSBridge *bridge;
+@property (nonatomic, strong) YHJSBridge *bridge;
 @property (nonatomic, strong) YHWebView *webView;
 @end
 
@@ -21,6 +22,7 @@
 - (void)dealloc {
     NSLog(@"释放 webViewController");
     [self.webView removeFromSuperview];
+    [self.bridge removeLifeCycleListenerCommon];
     self.webView = nil;
     self.bridge = nil;
 }
@@ -29,16 +31,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    YHWebViewJSBridge *bridge = [[YHWebViewJSBridge alloc] init];
-    bridge.delegate = self;
-    _bridge = bridge;
-    
-    YHWebView *webView = [[YHWebView alloc] initWithFrame:self.view.bounds delegate:_bridge];
+    // bridge 与  webView 绑定
+    YHWebView *webView = [[YHWebView alloc] initWithFrame:self.view.bounds];
+    WKPreferences *preference = [[WKPreferences alloc] init];
+    webView.configuration.preferences = preference;
+    preference.minimumFontSize = 16;
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"example" ofType:@"html"];
     NSURL *url = [NSURL fileURLWithPath:filePath];
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
     [self.view addSubview:webView];
-    _webView = webView;
+    self.webView = webView;
+    
+    YHJSBridge *bridge = [[YHJSBridge alloc] init];
+    bridge.delegate = self;
+    self.bridge = bridge;
+    [self.bridge registerHandler:@"nativeHandler" action:@"nativeLog" handle:^(YHScriptMessage *message) {
+        NSLog(@"log ==> %@", message.param);
+    }];
+    [self.bridge registerCommonHandler];
+    [self.bridge bindBridgeWithWebView:webView];
+    [self.bridge addLifeCycleListenerCommon];
 }
 
 #pragma mark - YHWebViewDelegate, JSBridgeDelegate

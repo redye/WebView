@@ -16,11 +16,11 @@
 		D1D313A2206248A900BE2F0A /* WebViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313A1206248A900BE2F0A /* WebViewTests.m */; };
 		D1D313AF2062495200BE2F0A /* YHWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313AE2062495200BE2F0A /* YHWebView.m */; };
 		D1D313B6206261A400BE2F0A /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313B5206261A400BE2F0A /* WebViewController.m */; };
-		D1D313B9206261B200BE2F0A /* YHWebViewJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313B8206261B200BE2F0A /* YHWebViewJSBridge.m */; };
+		D1D313B9206261B200BE2F0A /* YHJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313B8206261B200BE2F0A /* YHJSBridge.m */; };
 		D1E990EB20635C09000A3C40 /* example.html in Resources */ = {isa = PBXBuildFile; fileRef = D1E990EA20635C09000A3C40 /* example.html */; };
 		D1E990EE206391C9000A3C40 /* YHScriptMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E990ED206391C9000A3C40 /* YHScriptMessage.m */; };
-		D1E990F120639E24000A3C40 /* NativeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E990F020639E24000A3C40 /* NativeHandler.m */; };
-		D1E990F420639E64000A3C40 /* YHWebViewJSBridge+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E990F320639E64000A3C40 /* YHWebViewJSBridge+Addition.m */; };
+		D1E990F82064E3E2000A3C40 /* YHJSBridge+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E990F72064E3E2000A3C40 /* YHJSBridge+Common.m */; };
+		D1E99101206508BB000A3C40 /* YHJSBridge+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E99100206508BB000A3C40 /* YHJSBridge+Router.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,16 +51,16 @@
 		D1D313AE2062495200BE2F0A /* YHWebView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHWebView.m; sourceTree = "<group>"; };
 		D1D313B4206261A400BE2F0A /* WebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		D1D313B5206261A400BE2F0A /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
-		D1D313B7206261B200BE2F0A /* YHWebViewJSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHWebViewJSBridge.h; sourceTree = "<group>"; };
-		D1D313B8206261B200BE2F0A /* YHWebViewJSBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHWebViewJSBridge.m; sourceTree = "<group>"; };
+		D1D313B7206261B200BE2F0A /* YHJSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHJSBridge.h; sourceTree = "<group>"; };
+		D1D313B8206261B200BE2F0A /* YHJSBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHJSBridge.m; sourceTree = "<group>"; };
 		D1E990EA20635C09000A3C40 /* example.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = example.html; sourceTree = "<group>"; };
 		D1E990EC206391C9000A3C40 /* YHScriptMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHScriptMessage.h; sourceTree = "<group>"; };
 		D1E990ED206391C9000A3C40 /* YHScriptMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHScriptMessage.m; sourceTree = "<group>"; };
-		D1E990EF20639E24000A3C40 /* NativeHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeHandler.h; sourceTree = "<group>"; };
-		D1E990F020639E24000A3C40 /* NativeHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeHandler.m; sourceTree = "<group>"; };
-		D1E990F220639E64000A3C40 /* YHWebViewJSBridge+Addition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YHWebViewJSBridge+Addition.h"; sourceTree = "<group>"; };
-		D1E990F320639E64000A3C40 /* YHWebViewJSBridge+Addition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "YHWebViewJSBridge+Addition.m"; sourceTree = "<group>"; };
 		D1E990F52063A8C0000A3C40 /* YHWebViewHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHWebViewHeader.h; sourceTree = "<group>"; };
+		D1E990F62064E3E2000A3C40 /* YHJSBridge+Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YHJSBridge+Common.h"; sourceTree = "<group>"; };
+		D1E990F72064E3E2000A3C40 /* YHJSBridge+Common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "YHJSBridge+Common.m"; sourceTree = "<group>"; };
+		D1E990FF206508BB000A3C40 /* YHJSBridge+Router.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YHJSBridge+Router.h"; sourceTree = "<group>"; };
+		D1E99100206508BB000A3C40 /* YHJSBridge+Router.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "YHJSBridge+Router.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,8 +107,6 @@
 				D1D31389206248A900BE2F0A /* AppDelegate.m */,
 				D1D3138B206248A900BE2F0A /* ViewController.h */,
 				D1D3138C206248A900BE2F0A /* ViewController.m */,
-				D1E990EF20639E24000A3C40 /* NativeHandler.h */,
-				D1E990F020639E24000A3C40 /* NativeHandler.m */,
 				D1D313B4206261A400BE2F0A /* WebViewController.h */,
 				D1D313B5206261A400BE2F0A /* WebViewController.m */,
 				D1D3138E206248A900BE2F0A /* Main.storyboard */,
@@ -135,13 +133,15 @@
 			children = (
 				D1D313AD2062495200BE2F0A /* YHWebView.h */,
 				D1D313AE2062495200BE2F0A /* YHWebView.m */,
+				D1E990F52063A8C0000A3C40 /* YHWebViewHeader.h */,
 				D1E990EC206391C9000A3C40 /* YHScriptMessage.h */,
 				D1E990ED206391C9000A3C40 /* YHScriptMessage.m */,
-				D1D313B7206261B200BE2F0A /* YHWebViewJSBridge.h */,
-				D1D313B8206261B200BE2F0A /* YHWebViewJSBridge.m */,
-				D1E990F52063A8C0000A3C40 /* YHWebViewHeader.h */,
-				D1E990F220639E64000A3C40 /* YHWebViewJSBridge+Addition.h */,
-				D1E990F320639E64000A3C40 /* YHWebViewJSBridge+Addition.m */,
+				D1D313B7206261B200BE2F0A /* YHJSBridge.h */,
+				D1D313B8206261B200BE2F0A /* YHJSBridge.m */,
+				D1E990F62064E3E2000A3C40 /* YHJSBridge+Common.h */,
+				D1E990F72064E3E2000A3C40 /* YHJSBridge+Common.m */,
+				D1E990FF206508BB000A3C40 /* YHJSBridge+Router.h */,
+				D1E99100206508BB000A3C40 /* YHJSBridge+Router.m */,
 			);
 			path = hybrid;
 			sourceTree = "<group>";
@@ -251,13 +251,13 @@
 			files = (
 				D1D313AF2062495200BE2F0A /* YHWebView.m in Sources */,
 				D1D313B6206261A400BE2F0A /* WebViewController.m in Sources */,
+				D1E99101206508BB000A3C40 /* YHJSBridge+Router.m in Sources */,
+				D1E990F82064E3E2000A3C40 /* YHJSBridge+Common.m in Sources */,
 				D1D3138D206248A900BE2F0A /* ViewController.m in Sources */,
 				D1D31398206248A900BE2F0A /* main.m in Sources */,
 				D1D3138A206248A900BE2F0A /* AppDelegate.m in Sources */,
-				D1D313B9206261B200BE2F0A /* YHWebViewJSBridge.m in Sources */,
+				D1D313B9206261B200BE2F0A /* YHJSBridge.m in Sources */,
 				D1E990EE206391C9000A3C40 /* YHScriptMessage.m in Sources */,
-				D1E990F120639E24000A3C40 /* NativeHandler.m in Sources */,
-				D1E990F420639E64000A3C40 /* YHWebViewJSBridge+Addition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

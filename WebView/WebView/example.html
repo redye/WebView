@@ -14,28 +14,40 @@
 	<script type="text/javascript">
 		function btnAction(e) {
 			var msgBody = {};
-			msgBody.handler = 'nativeHandler';
+			msgBody.handler = 'common';
 			msgBody.action = 'nativeLog';
 			msgBody.param = {
 				name: 'redye',
 				age: 28
 			};
-			msgBody.callback = 'callback';
+			msgBody.callbackFun = 'callbackFun';
+			msgBody.callbackId = 1;
 			window.webkit.messageHandlers.native.postMessage(msgBody);
 		}
 
-		function callback(response) {
+		function callbackFun(callbackId, response) {
 			var p = document.getElementById('log').appendChild(document.createElement('p'))
 			p.innerHTML = typeof response === 'string' ? response : JSON.stringify(response);
 		}
+
+		window.eventDispatcher: function(eventId, response) {
+			if (eventId === 'applicationEnterForeground') {
+				var p = document.getElementById('log').appendChild(document.createElement('p'))
+				p.innerHTML = 'applicationEnterForeground'
+			} else if (eventId === 'applicationEnterBackground') {
+				var p = document.getElementById('log').appendChild(document.createElement('p'))
+				p.innerHTML = 'applicationEnterBackground'
+			}
+		}
 	</script>
+
 </head>
 
 <body>
 	<h1>WKWebView Demo</h1>
 	<div id='buttons'>
 		<button id='button' onclick="btnAction()">按钮</button>
-		<button id='button' onclick="callback('fjhaksdh')">按钮2</button>
+		<button id='button' onclick="callbackFun(1, 'fjhaksdh')">按钮2</button>
 	</div> 
 	<div id='log'></div>
 </body>
