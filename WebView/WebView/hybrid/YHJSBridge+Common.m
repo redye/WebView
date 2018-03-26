@@ -12,26 +12,30 @@
 
 - (void)registerCommonHandler {
     __weak typeof(self) weakSelf = self;
-    [self registerHandler:@"common" action:@"copyContent" handle:^(YHScriptMessage *message) {
+    [self registerHandler:@"Common" action:@"copyContent" handle:^(YHScriptMessage *message) {
         NSLog(@"复制到剪切板");
-        NSString *content = [message.param objectForKey:@"content"];
+        NSString *content = [message.params objectForKey:@"content"];
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = content;
     }];
     
-    [self registerHandler:@"common" action:@"nativeLog" handle:^(YHScriptMessage *message) {
-        NSLog(@"nativeLog => %@", message.param);
+    [self registerHandler:@"Common" action:@"nativeLog" handle:^(YHScriptMessage *message) {
+        NSLog(@"nativeLog => %@", message.params);
         [message callback:@{@"result": @"nativeLog回调"}];
     }];
     
-    [self registerHandler:@"common" action:@"getLocation" handle:^(YHScriptMessage *message) {
+    [self registerHandler:@"Common" action:@"getLocation" handle:^(YHScriptMessage *message) {
         NSDictionary *response = [weakSelf getLocation];
         [message callback:response];
     }];
     
-    [self registerHandler:@"common" action:@"takeCamera" handle:^(YHScriptMessage *message) {
+    [self registerHandler:@"Common" action:@"takeCamera" handle:^(YHScriptMessage *message) {
         NSDictionary *response = [weakSelf takeCamera];
         [message callback:response];
+    }];
+    
+    [self registerHandler:@"Common" action:@"commonParams" handle:^(YHScriptMessage *message) {
+        [message callback:[weakSelf getCommonParams]];
     }];
 }
 
@@ -43,6 +47,10 @@
 - (NSDictionary *)takeCamera {
     NSLog(@"拍照");
     return @{@"data": @"照片"};
+}
+
+- (NSDictionary *)getCommonParams {
+    return @{@"appVersion": @"1.0.0"};
 }
 
 - (void)addLifeCycleListenerCommon {

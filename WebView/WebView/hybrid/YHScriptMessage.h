@@ -15,9 +15,9 @@
 
 @property (nonatomic, strong) NSString *action;
 
-@property (nonatomic, strong) NSDictionary *param;
+@property (nonatomic, strong) NSDictionary *params;
 
-@property (nonatomic, strong) NSString *callbackFun;
+@property (nonatomic, strong) NSString *callbackFunction;
 
 @property (nonatomic, strong) NSString *callbackId;
 

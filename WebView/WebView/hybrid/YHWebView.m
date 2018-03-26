@@ -96,7 +96,7 @@ static NSString *YHWebViewScriptMessageName;
 }
 
 + (NSString *)scriptMessageName {
-    return YHWebViewScriptMessageName ?: @"native";
+    return YHWebViewScriptMessageName ?: @"Native";
 }
 
 #pragma mark - WKUIDelegate

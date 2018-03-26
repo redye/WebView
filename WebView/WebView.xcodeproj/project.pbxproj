@@ -17,10 +17,10 @@
 		D1D313AF2062495200BE2F0A /* YHWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313AE2062495200BE2F0A /* YHWebView.m */; };
 		D1D313B6206261A400BE2F0A /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313B5206261A400BE2F0A /* WebViewController.m */; };
 		D1D313B9206261B200BE2F0A /* YHJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D313B8206261B200BE2F0A /* YHJSBridge.m */; };
-		D1E990EB20635C09000A3C40 /* example.html in Resources */ = {isa = PBXBuildFile; fileRef = D1E990EA20635C09000A3C40 /* example.html */; };
 		D1E990EE206391C9000A3C40 /* YHScriptMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E990ED206391C9000A3C40 /* YHScriptMessage.m */; };
 		D1E990F82064E3E2000A3C40 /* YHJSBridge+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E990F72064E3E2000A3C40 /* YHJSBridge+Common.m */; };
 		D1E99101206508BB000A3C40 /* YHJSBridge+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E99100206508BB000A3C40 /* YHJSBridge+Router.m */; };
+		D1E9910F20689EDF000A3C40 /* html in Resources */ = {isa = PBXBuildFile; fileRef = D1E9910E20689EDF000A3C40 /* html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +53,6 @@
 		D1D313B5206261A400BE2F0A /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		D1D313B7206261B200BE2F0A /* YHJSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHJSBridge.h; sourceTree = "<group>"; };
 		D1D313B8206261B200BE2F0A /* YHJSBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHJSBridge.m; sourceTree = "<group>"; };
-		D1E990EA20635C09000A3C40 /* example.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = example.html; sourceTree = "<group>"; };
 		D1E990EC206391C9000A3C40 /* YHScriptMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHScriptMessage.h; sourceTree = "<group>"; };
 		D1E990ED206391C9000A3C40 /* YHScriptMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YHScriptMessage.m; sourceTree = "<group>"; };
 		D1E990F52063A8C0000A3C40 /* YHWebViewHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YHWebViewHeader.h; sourceTree = "<group>"; };
@@ -61,6 +60,7 @@
 		D1E990F72064E3E2000A3C40 /* YHJSBridge+Common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "YHJSBridge+Common.m"; sourceTree = "<group>"; };
 		D1E990FF206508BB000A3C40 /* YHJSBridge+Router.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YHJSBridge+Router.h"; sourceTree = "<group>"; };
 		D1E99100206508BB000A3C40 /* YHJSBridge+Router.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "YHJSBridge+Router.m"; sourceTree = "<group>"; };
+		D1E9910E20689EDF000A3C40 /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; path = html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +102,7 @@
 		D1D31387206248A900BE2F0A /* WebView */ = {
 			isa = PBXGroup;
 			children = (
+				D1E9910E20689EDF000A3C40 /* html */,
 				D1D313AC2062492200BE2F0A /* hybrid */,
 				D1D31388206248A900BE2F0A /* AppDelegate.h */,
 				D1D31389206248A900BE2F0A /* AppDelegate.m */,
@@ -114,7 +115,6 @@
 				D1D31393206248A900BE2F0A /* LaunchScreen.storyboard */,
 				D1D31396206248A900BE2F0A /* Info.plist */,
 				D1D31397206248A900BE2F0A /* main.m */,
-				D1E990EA20635C09000A3C40 /* example.html */,
 			);
 			path = WebView;
 			sourceTree = "<group>";
@@ -229,9 +229,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1D31395206248A900BE2F0A /* LaunchScreen.storyboard in Resources */,
+				D1E9910F20689EDF000A3C40 /* html in Resources */,
 				D1D31392206248A900BE2F0A /* Assets.xcassets in Resources */,
 				D1D31390206248A900BE2F0A /* Main.storyboard in Resources */,
-				D1E990EB20635C09000A3C40 /* example.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +410,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 58A2U6L78Y;
 				INFOPLIST_FILE = WebView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redye.WebView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -424,6 +425,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 58A2U6L78Y;
 				INFOPLIST_FILE = WebView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redye.WebView;
 				PRODUCT_NAME = "$(TARGET_NAME)";

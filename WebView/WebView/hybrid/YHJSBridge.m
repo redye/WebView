@@ -56,13 +56,13 @@
 
 - (void)webView:(YHWebView *)webView didReceiveScriptMessage:(YHScriptMessage *)message {
     if (message.handler && message.action) {
-        if (message.callbackId && message.callbackFun &&
-            message.callbackId.length > 0 && message.callbackFun.length > 0) {
+        if (message.callbackId && message.callbackFunction &&
+            message.callbackId.length > 0 && message.callbackFunction.length > 0) {
             
             __weak typeof(self) weakSelf = self;
             __weak typeof(message) weakMessage = message;
             [message setCallback:^(NSDictionary *response) {
-                [weakSelf injectMessageWithFunction:weakMessage.callbackFun
+                [weakSelf injectMessageWithFunction:weakMessage.callbackFunction
                                           actionId:weakMessage.callbackId
                                             params:response];
             }];
@@ -87,9 +87,7 @@
     NSString *paramsJSString = [self _transcodingJavascriptMessage:paramsString];
     NSString* javascriptCommand = [NSString stringWithFormat:@"%@('%@', '%@');", msg, actionId, paramsJSString];
     if ([[NSThread currentThread] isMainThread]) {
-        [self.webView evaluateJavaScript:javascriptCommand completionHandler:^(id _Nullable reponse, NSError * _Nullable error) {
-            NSLog(@"指定结果");
-        }];
+        [self.webView evaluateJavaScript:javascriptCommand];
     } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.webView evaluateJavaScript:javascriptCommand];

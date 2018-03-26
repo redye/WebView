@@ -21,9 +21,9 @@
     if (self) {
         self.action = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"action"]];
         self.handler = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"handler"]];
-        self.callbackFun = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"callbackFun"]];
+        self.callbackFunction = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"callbackFunction"]];
         self.callbackId = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"callbackId"]];
-        self.param = [dictionary objectForKey:@"param"] ?: @{};
+        self.params = [dictionary objectForKey:@"params"] ?: @{};
     }
     return self;
 }

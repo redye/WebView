@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>example</title>
+	<style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h1 { color:steelblue; font-size:30px; margin-top:24px; }
+		button{ margin:20px; font-size:40px; }
+		.logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+
+	</style>
+	<script type="text/javascript" src="./jsbridge/jsbridge-core.js"></script>
+	<script type="text/javascript" src="./jsbridge/jsbridge-common.js"></script>
+
+	<script type="text/javascript">
+		function btnAction(e) {
+			console.log('btnAction');
+			var msgBody = {
+				name: 'redye',
+				age: 28
+			};
+			window.bridge.Common.nativeLog(msgBody);
+		}
+
+		function btnAction2() {
+			window.bridge.Common.getCommonParams(function(response) {
+				var p = document.getElementById('log').appendChild(document.createElement('p'));
+				p.innerHTML = JSON.stringify(response);
+			});
+		}
+
+		window.onListenEvent('applicationEnterForeground', function() {
+			var p = document.getElementById('log').appendChild(document.createElement('p'));
+			p.innerHTML = 'applicationEnterForeground';
+		});
+
+		window.onListenEvent('applicationEnterBackground', function() {
+			var p = document.getElementById('log').appendChild(document.createElement('p'));
+			p.innerHTML = 'applicationEnterBackground';
+		});
+	</script>
+
+</head>
+
+<body>
+	<h1>WKWebView Demo</h1>
+	<div id='buttons'>
+		<button id='button' onclick="btnAction()">按钮</button>
+		<button id='button' onclick="btnAction2()">按钮2</button>
+	</div> 
+	<div id='log'></div>
+</body>
+</html>

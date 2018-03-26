@@ -58,14 +58,6 @@
 @property (nonatomic, weak) id<YHWebViewDelegate> webViewDelegate;
 
 /**
- 初始化 webView 的实例
-
- @param frame 位置
- @return webView 实例
- */
-- (instancetype)initWithFrame:(CGRect)frame;
-
-/**
  设置 app scheme
 
  @param appScheme app scheme

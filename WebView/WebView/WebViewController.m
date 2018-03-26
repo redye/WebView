@@ -36,7 +36,7 @@
     WKPreferences *preference = [[WKPreferences alloc] init];
     webView.configuration.preferences = preference;
     preference.minimumFontSize = 16;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"example" ofType:@"html"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"html/example" ofType:@"html"];
     NSURL *url = [NSURL fileURLWithPath:filePath];
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
     [self.view addSubview:webView];
@@ -46,7 +46,7 @@
     bridge.delegate = self;
     self.bridge = bridge;
     [self.bridge registerHandler:@"nativeHandler" action:@"nativeLog" handle:^(YHScriptMessage *message) {
-        NSLog(@"log ==> %@", message.param);
+        NSLog(@"log ==> %@", message.params);
     }];
     [self.bridge registerCommonHandler];
     [self.bridge bindBridgeWithWebView:webView];
