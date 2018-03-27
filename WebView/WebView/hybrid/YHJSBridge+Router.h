@@ -10,4 +10,6 @@
 
 @interface YHJSBridge (Router)
 
+- (void)registerRouterHandler;
+
 @end

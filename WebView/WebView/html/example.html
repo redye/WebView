@@ -12,6 +12,7 @@
 	</style>
 	<script type="text/javascript" src="./jsbridge/jsbridge-core.js"></script>
 	<script type="text/javascript" src="./jsbridge/jsbridge-common.js"></script>
+	<script type="text/javascript" src="./jsbridge/jsbridge-router.js"></script>
 
 	<script type="text/javascript">
 		function btnAction(e) {
@@ -28,6 +29,10 @@
 				var p = document.getElementById('log').appendChild(document.createElement('p'));
 				p.innerHTML = JSON.stringify(response);
 			});
+		}
+
+		function openLink() {
+			window.bridge.Router.openLink('http://www.baidu.com');
 		}
 
 		window.onListenEvent('applicationEnterForeground', function() {
@@ -47,8 +52,12 @@
 	<h1>WKWebView Demo</h1>
 	<div id='buttons'>
 		<button id='button' onclick="btnAction()">按钮</button>
-		<button id='button' onclick="btnAction2()">按钮2</button>
+		<button id='button1' onclick="btnAction2()">按钮2</button>
+		<button id='button2' onclick="openLink()">打开链接</button>
+		<a href="http://www.baidu.com">点击跳转</a>
 	</div> 
-	<div id='log'></div>
+	<div id='log'>
+		<p id='test_p'>测试数据</p>
+	</div>
 </body>
 </html>

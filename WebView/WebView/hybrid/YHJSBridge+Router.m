@@ -10,4 +10,17 @@
 
 @implementation YHJSBridge (Router)
 
+- (void)registerRouterHandler {
+    
+    [self registerHandler:@"Router" action:@"openLink" handle:^(YHScriptMessage *message) {
+        NSString *urlString = [message.params objectForKey:@"url"];
+        // MGJRouter: openUrl
+        NSLog(@"url => %@", urlString);
+        NSURL *url = [NSURL URLWithString:urlString];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }];
+}
+
 @end

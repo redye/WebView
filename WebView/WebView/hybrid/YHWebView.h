@@ -10,6 +10,11 @@
 #import <WebKit/WebKit.h>
 #import "YHScriptMessage.h"
 
+typedef NS_ENUM(NSInteger, SyncCookieMode) {
+    SyncCookieModeNone = 0,
+    SyncCookieModeMust
+};
+
 @class YHWebView;
 @protocol YHWebViewDelegate<NSObject>
 
@@ -56,6 +61,10 @@
 @interface YHWebView : WKWebView
 
 @property (nonatomic, weak) id<YHWebViewDelegate> webViewDelegate;
+
+@property (nonatomic, assign) SyncCookieMode syncCookieMode;
+
+- (instancetype)initWithFrame:(CGRect)frame syncCookieMode:(SyncCookieMode)mode;
 
 /**
  设置 app scheme

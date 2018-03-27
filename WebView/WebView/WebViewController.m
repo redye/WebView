@@ -10,6 +10,7 @@
 #import "YHWebView.h"
 #import "YHJSBridge.h"
 #import "YHJSBridge+Common.h"
+#import "YHJSBridge+Router.h"
 
 @interface WebViewController ()<YHWebViewDelegate, YHJSBridgeDelegate>
 
@@ -32,13 +33,15 @@
     [super viewDidLoad];
     
     // bridge 与  webView 绑定
-    YHWebView *webView = [[YHWebView alloc] initWithFrame:self.view.bounds];
+    YHWebView *webView = [[YHWebView alloc] initWithFrame:self.view.bounds syncCookieMode:SyncCookieModeNone];
     WKPreferences *preference = [[WKPreferences alloc] init];
     webView.configuration.preferences = preference;
     preference.minimumFontSize = 16;
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"html/example" ofType:@"html"];
     NSURL *url = [NSURL fileURLWithPath:filePath];
-    [webView loadRequest:[NSURLRequest requestWithURL:url]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+
+    [webView loadRequest:request];
     [self.view addSubview:webView];
     self.webView = webView;
     
@@ -51,6 +54,7 @@
     [self.bridge registerCommonHandler];
     [self.bridge bindBridgeWithWebView:webView];
     [self.bridge addLifeCycleListenerCommon];
+    [self.bridge registerRouterHandler];
 }
 
 #pragma mark - YHWebViewDelegate, JSBridgeDelegate

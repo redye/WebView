@@ -40,7 +40,7 @@ static NSString *YHWebViewScriptMessageName;
     [self.configuration.userContentController removeScriptMessageHandlerForName:[YHWebView scriptMessageName]];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame syncCookieMode:(SyncCookieMode)mode {
     [self setWebViewUserAgent];
     
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
@@ -54,6 +54,7 @@ static NSString *YHWebViewScriptMessageName;
     configuration.userContentController = contentController;
     self = [super initWithFrame:frame configuration:configuration];
     if (self) {
+        _syncCookieMode = mode;
         [self setUp];
     }
     return self;
@@ -105,10 +106,40 @@ static NSString *YHWebViewScriptMessageName;
     completionHandler();
 }
 
+#pragma mark - cookie
+- (void)syncClientCookieScripts:(NSMutableURLRequest *)request {
+    if (!request.URL) {
+        return;
+    }
+    NSArray *availableCookie = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:request.URL];
+    NSMutableArray *filterCookie = [[NSMutableArray alloc] init];
+    
+    for (NSHTTPCookie * cookie in availableCookie) {
+        if (self.syncCookieMode) {
+            //httponly需求不得写入js cookie
+            if (!cookie.HTTPOnly) {
+                [filterCookie addObject:cookie];
+            }
+        }
+    }
+    
+    // 拼接 JS 代码 对 Client Side 注入Cookie
+    if (filterCookie.count > 0) {
+        for (NSHTTPCookie *cookie in filterCookie) {
+            NSTimeInterval expiretime = [cookie.expiresDate timeIntervalSince1970];
+            NSString *js = [NSString stringWithFormat:@"document.cookie ='%@=%@;expires=%f';", cookie.name, cookie.value, expiretime];
+            WKUserScript *jsscript = [[WKUserScript alloc] initWithSource:js injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO];
+            [self.configuration.userContentController addUserScript:jsscript];
+        }
+    }
+}
+
 #pragma mark - WKNavigationDelegate
 ///请求之前，决定是否要跳转:用户点击网页上的链接，需要打开新页面时，将先调用这个方法。
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSLog(@"1");
+    // 同步客户端 cookie
+    [self syncClientCookieScripts:navigationAction.request.mutableCopy];
     BOOL isAllow = YES;
     if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:)]) {
         isAllow = [self.webViewDelegate webView:self shouldStartLoadWithRequest:navigationAction.request];
